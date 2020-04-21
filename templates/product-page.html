@@ -2,6 +2,62 @@
 
 
 {% block maincontent%}
+<style>
+.al{
+    
+        color: black;
+        border: 2px solid gray;
+        margin: 2px;
+        padding: 5px 5px;
+        width: 40px;
+        height:40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+      
+}
+
+  .al:hover {
+    background-color: gray;
+    color: black;
+  }
+  .al-active{
+    background-color: grey;
+    color: black;
+    border: 2px solid black !important;
+    padding: 5px 5px;
+    width: 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+.cl{
+    width: 30px;
+    height:30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+  }
+  
+  
+  .cl:hover {
+    border: 2px solid gray;
+  }
+
+.cl-active{
+    border: 2px solid black !important;
+}
+{% for color in product.colors.all %}
+.color-{{forloop.counter}}{
+    background-color: {{color.colorcode}};
+    border:1px solid grey;
+}
+
+{% endfor %}
+
+
+</style>
 
 <!--Main layout-->
 <main class="mt-5 pt-4">
@@ -117,3 +173,56 @@
 </main>
 <!--Main layout-->
 {%  endblock %}
+{% block extra_scripts %}
+<script>
+  var size='Nn';
+  var color='Nn';
+  var sp = 0;
+  var cp = 0;
+
+    $(".al").click(function(e){
+      $(".al").removeClass("al-active")
+      $(this).addClass("al-active")
+      size = $(this).html()
+      $('#size-label').html(size)
+    })
+
+    $(".cl").click(function(e){
+      $(".cl").removeClass("cl-active")
+      $(this).addClass("cl-active")
+      color = $(this).attr('id')
+      $('#color-label').html(color)
+    })
+    $(document).on('submit', '#form1', function (e) {
+      if (size=='Nn'){
+        $('#size-label').html('Please select size!')
+        sp = 0
+      }
+      else{
+        sp = 1
+      }
+      if (color=='Nn'){
+        $('#color-label').html('Please select colour!')
+        cp = 0
+      }
+      else{
+        cp = 1
+      }
+      if (cp == 1 && sp == 1) {
+        $("<input />").attr("type", "hidden")
+            .attr("name", "size")
+            .attr("value", size)
+            .appendTo("#form1");
+        $("<input />").attr("type", "hidden")
+            .attr("name", "color")
+            .attr("value", color)
+            .appendTo("#form1");
+        return true;
+      }
+      else{
+        return false;
+      }
+    });
+</script>
+{% endblock extra_scripts %}
+
